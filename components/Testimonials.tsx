@@ -24,7 +24,7 @@ const TestimonialCard: React.FC<TestimonialCardProps> = ({ quote, name, location
 const Testimonials: React.FC = () => {
     const testimonialsData = [
         {
-            quote: "Descobri um Orixá que nem imaginava! O Àse-Orí mudou minha forma de ver a vida.",
+            quote: "Descobri um Orixá que nem imaginava! O AXÉ CAMINHOS mudou minha forma de ver a vida.",
             name: "Maria S.",
             location: "Salvador/BA",
             avatarUrl: "https://picsum.photos/seed/maria/100/100"
@@ -47,7 +47,7 @@ const Testimonials: React.FC = () => {
         <section id="depoimentos" className="py-20 bg-black/20">
             <div className="container mx-auto px-6">
                 <h2 className="text-4xl md:text-5xl font-serif font-bold text-center mb-16 text-white">
-                    Quem Já Sentiu o Axé do Àse-Orí
+                    Quem Já Sentiu o Axé do AXÉ CAMINHOS
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {testimonialsData.map((testimonial, index) => (

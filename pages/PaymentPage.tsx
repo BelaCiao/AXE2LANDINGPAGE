@@ -1,5 +1,18 @@
-import React, { useState } from 'react';
-import PaymentModal from './PaymentModal';
+import React from 'react';
+import { useState, useEffect } from 'react';
+import PaymentModal from '../components/PaymentModal';
+import { ciganasCards, CardData } from '../data/ciganas';
+import OtherOracles from '../components/OtherOracles';
+
+// Fisher-Yates shuffle algorithm
+const shuffleDeck = (deck: CardData[]): CardData[] => {
+  const shuffled = [...deck];
+  for (let i = shuffled.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+};
 
 const ShieldCheckIcon: React.FC<{className?: string}> = ({ className }) => (
     <svg xmlns="http://www.w3.org/2000/svg" className={className} width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -56,8 +69,27 @@ const PackageCard: React.FC<Package & { onPurchase: () => void; }> = ({ name, pr
     </div>
 );
 
-const FinalCTA: React.FC = () => {
+const PaymentPage: React.FC = () => {
     const [selectedPackage, setSelectedPackage] = useState<Package | null>(null);
+    const [deck, setDeck] = useState<CardData[]>([]);
+    const [drawnCard, setDrawnCard] = useState<CardData | null>(null);
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    useEffect(() => {
+        setDeck(shuffleDeck(ciganasCards));
+    }, []);
+
+    const handleDrawCard = () => {
+        if (deck.length > 0 && !drawnCard) {
+            const card = deck[0];
+            setDrawnCard(card);
+            setTimeout(() => setIsFlipped(true), 100);
+        }
+    };
+    
+    const scrollToPackages = () => {
+        document.getElementById('packages')?.scrollIntoView({ behavior: 'smooth' });
+    };
 
     const packages: Package[] = [
         { name: 'Caminho Aberto', price: '19,90', credits: '5', tag: 'Ideal para iniciar.', popular: false },
@@ -66,15 +98,62 @@ const FinalCTA: React.FC = () => {
     ];
 
     return (
-        <>
-            <section id="cta" className="py-20 bg-gradient-to-t from-ase-purple/30 to-transparent">
-                <div className="container mx-auto px-6 text-center">
+        <div className="w-full flex-grow flex flex-col items-center animate-fade-in-up">
+            {/* Teaser Reading Section */}
+            <section className="py-20 w-full max-w-4xl px-4 text-center">
+                <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-4">Sinta o Poder do Oráculo</h2>
+                <p className="text-gray-400 mb-12 max-w-2xl mx-auto">
+                    Concentre-se em sua energia e tire uma carta gratuita. Veja uma amostra da clareza que o Povo Cigano pode trazer para o seu caminho.
+                </p>
+
+                <div className="flex flex-col md:flex-row items-center justify-center gap-8 min-h-[320px]">
+                    <div className="w-48 h-72">
+                        {!drawnCard ? (
+                            <div 
+                                onClick={handleDrawCard}
+                                className="w-full h-full bg-ase-purple border-2 border-ase-gold/50 rounded-2xl flex flex-col items-center justify-center p-4 text-center cursor-pointer transform hover:scale-105 transition-transform duration-300"
+                            >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" className="text-ase-gold opacity-50 mb-4"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="12" r="3" /><line x1="12" y1="2" x2="12" y2="9" /><line x1="12" y1="15" x2="12" y2="22" /><line x1="22" y1="12" x2="15" y2="12" /><line x1="9" y1="12" x2="2" y2="12" /><line x1="4.93" y1="4.93" x2="9.17" y2="9.17" /><line x1="14.83" y1="14.83" x2="19.07" y2="19.07" /><line x1="4.93" y1="19.07" x2="9.17" y2="14.83" /><line x1="14.83" y1="9.17" x2="19.07" y2="4.93" /></svg>
+                                <span className="font-semibold text-ase-gold">Clique para tirar sua carta</span>
+                            </div>
+                        ) : (
+                             <div className={`card-container w-full h-full ${isFlipped ? 'flipped' : ''}`}>
+                                <div className="card-inner">
+                                    <div className="card-front bg-ase-purple border-2 border-ase-gold/50 rounded-2xl"></div>
+                                    <div className="card-back">
+                                        <img src={drawnCard.image} alt={drawnCard.name} className="w-full h-full object-cover rounded-2xl" />
+                                    </div>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+
+                    {isFlipped && drawnCard && (
+                        <div className="md:w-1/2 text-left animate-fade-in-up">
+                            <h3 className="text-3xl font-serif text-ase-gold mb-2">{drawnCard.name}</h3>
+                            <p className="text-lg text-gray-300 italic mb-6">{drawnCard.teaser}</p>
+                            <p className="text-gray-400 mb-6">A mensagem completa, com conselhos sobre amor, carreira e espiritualidade, está esperando por você. Libere sua leitura para desvendar todos os segredos.</p>
+                            <button
+                                onClick={scrollToPackages}
+                                className="bg-ase-gold hover:bg-yellow-400 text-ase-deep-blue font-bold text-lg py-3 px-8 rounded-lg shadow-lg shadow-ase-gold/40 transform hover:scale-105 transition-all duration-300 animate-subtle-pulse"
+                            >
+                                Desvendar Mensagem Completa
+                            </button>
+                        </div>
+                    )}
+                </div>
+            </section>
+
+
+            {/* Packages Section */}
+            <section id="payment" className="py-20 bg-gradient-to-t from-ase-purple/30 to-transparent w-full flex-grow flex flex-col items-center justify-center">
+                <div className="container mx-auto px-6 text-center flex flex-col items-center">
                     <h3 className="text-2xl font-serif text-ase-gold mb-4">Dê o próximo passo na sua jornada de Axé!</h3>
                     <h2 className="text-4xl md:text-5xl font-serif font-bold mb-16 text-white">
                       Escolha o Pacote de Axé que Combina com Seu Caminho
                     </h2>
 
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20 animate-fade-in-up">
+                    <div id="packages" className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-20">
                         {packages.map(pkg => <PackageCard key={pkg.name} {...pkg} onPurchase={() => setSelectedPackage(pkg)} />)}
                     </div>
 
@@ -84,7 +163,9 @@ const FinalCTA: React.FC = () => {
                       <PaymentIcons />
                     </div>
                     
-                    <div className="mt-20 max-w-4xl mx-auto bg-slate-900/50 p-6 rounded-xl border border-ase-purple/30 flex flex-col md:flex-row items-center gap-6 text-left">
+                    <OtherOracles />
+
+                    <div className="max-w-4xl mx-auto bg-slate-900/50 p-6 rounded-xl border border-ase-purple/30 flex flex-col md:flex-row items-center gap-6 text-left">
                         <div className="flex-shrink-0 text-ase-turquoise">
                             <ShieldCheckIcon className="w-16 h-16 md:w-24 md:h-24"/>
                         </div>
@@ -104,8 +185,8 @@ const FinalCTA: React.FC = () => {
                 </div>
             </section>
             {selectedPackage && <PaymentModal pkg={selectedPackage} onClose={() => setSelectedPackage(null)} />}
-        </>
+        </div>
     );
 };
 
-export default FinalCTA;
+export default PaymentPage;

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import HomePage from './pages/HomePage';
-import OraclePage from './pages/OraclePage';
+import PaymentPage from './pages/PaymentPage';
 
-type Page = 'home' | 'oracle';
+type Page = 'home' | 'payment';
 
 const App: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<Page>('oracle');
+  const [currentPage, setCurrentPage] = useState<Page>('home');
 
   const backgroundStyle = {
     backgroundImage: `
@@ -19,17 +19,18 @@ const App: React.FC = () => {
 
   const navigateTo = (page: Page, hash?: string) => {
     setCurrentPage(page);
-    if (page === 'home' && hash) {
-      // Use requestAnimationFrame to ensure the element exists before scrolling
-      requestAnimationFrame(() => {
+    
+    // Scroll to top or to a specific element after page change
+    requestAnimationFrame(() => {
+      if (hash) {
         const element = document.querySelector(hash);
         if (element) {
           element.scrollIntoView({ behavior: 'smooth' });
         }
-      });
-    } else {
-        window.scrollTo(0, 0);
-    }
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
   };
   
   return (
@@ -38,7 +39,7 @@ const App: React.FC = () => {
         <Header navigateTo={navigateTo} />
         <main className="w-full flex-grow flex flex-col items-center">
           {currentPage === 'home' && <HomePage navigateTo={navigateTo} />}
-          {currentPage === 'oracle' && <OraclePage navigateTo={navigateTo} />}
+          {currentPage === 'payment' && <PaymentPage />}
         </main>
         <Footer />
       </div>

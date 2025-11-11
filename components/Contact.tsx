@@ -22,7 +22,7 @@ const Contact: React.FC = () => {
         }));
     };
 
-    const mailtoLink = `mailto:maicongn@hotmail.com?subject=${encodeURIComponent(`Contato Àlá Àse - ${formData.name}`)}&body=${encodeURIComponent(formData.message + `\n\nDe: ${formData.name}\nEmail: ${formData.email}`)}`;
+    const mailtoLink = `mailto:maicongn@hotmail.com?subject=${encodeURIComponent(`Contato AXÉ CAMINHOS - ${formData.name}`)}&body=${encodeURIComponent(formData.message + `\n\nDe: ${formData.name}\nEmail: ${formData.email}`)}`;
 
     return (
         <section id="contato" className="py-20 w-full">

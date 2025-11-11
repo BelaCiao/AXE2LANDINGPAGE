@@ -19,7 +19,7 @@ const Disclaimer: React.FC = () => {
                 </div>
                 <h3 className="text-3xl font-serif font-bold mb-4 text-white">Importante: Respeito e Tradição</h3>
                 <p className="text-gray-400 leading-relaxed">
-                    O Àse-Orí é uma ferramenta de autoconhecimento e guia. Lembre-se sempre: para rituais, Ebós e aprofundamento na sua linhagem, consulte seu Pai de Santo, Mãe de Santo ou Guia Espiritual de confiança. Nosso aplicativo não substitui a força e a sabedoria da liturgia presencial.
+                    O AXÉ CAMINHOS é uma ferramenta de autoconhecimento e guia. Lembre-se sempre: para rituais, Ebós e aprofundamento na sua linhagem, consulte seu Pai de Santo, Mãe de Santo ou Guia Espiritual de confiança. Nosso aplicativo não substitui a força e a sabedoria da liturgia presencial.
                 </p>
             </div>
         </section>
