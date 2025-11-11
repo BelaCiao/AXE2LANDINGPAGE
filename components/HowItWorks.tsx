@@ -1,40 +1,36 @@
 import React from 'react';
+import { ciganasCards, CardData } from '../data/ciganas';
 
-const readingResult = [
-  {
-    number: 6,
-    name: 'As Nuvens',
-    keywords: 'Confusão, incerteza, dúvida, instabilidade',
-    position: 'O Passado - A Raiz',
-    description: 'Aponta para um período de confusão, dúvidas e incertezas. A situação não está clara. É preciso esperar a tempestade passar para tomar decisões.'
-  },
-  {
-    number: 17,
-    name: 'A Cegonha',
-    keywords: 'Mudança, novidade, gravidez, viagem',
-    position: 'O Presente - A Situação',
-    description: 'Anuncia mudanças positivas, novidades e surpresas. Pode indicar uma mudança de casa, uma viagem ou a chegada de um bebê. É o movimento da vida.'
-  },
-  {
-    number: 12,
-    name: 'Os Pássaros',
-    keywords: 'Comunicação, fofoca, conversas, agitação',
-    position: 'O Futuro - O Conselho',
-    description: 'Representa a comunicação, conversas e negociações. Pode também alertar para fofocas e mal-entendidos. Muita agitação e troca de informações.'
-  }
-];
+const exampleCardsData = [
+  { id: 6, position: 'O Passado - A Raiz' },
+  { id: 17, position: 'O Presente - A Situação' },
+  { id: 12, position: 'O Futuro - O Conselho' }
+]
+.map(example => {
+    const cardData = ciganasCards.find(c => c.id === example.id);
+    // Assuming cardData is always found for these hardcoded IDs
+    return { ...cardData!, position: example.position };
+})
+.filter((card): card is CardData & { position: string } => card !== undefined);
 
-const CardResult: React.FC<{ card: typeof readingResult[0] }> = ({ card }) => (
+
+interface ExampleCard {
+    id: number;
+    name: string;
+    image: string;
+    description: string;
+    position: string;
+}
+
+const CardResult: React.FC<{ card: ExampleCard }> = ({ card }) => (
   <div className="border border-ase-gold/20 rounded-lg p-6 flex flex-col sm:flex-row gap-6 bg-black/20">
-    <div className="flex-shrink-0 w-full sm:w-1/4 bg-slate-100/10 rounded-md p-4 text-center flex flex-col justify-center items-center">
-        <span className="text-3xl font-serif font-bold text-ase-gold">{card.number}</span>
-        <h4 className="text-xl font-bold mt-1 text-white">{card.name}</h4>
-        <p className="text-xs text-gray-400 mt-2">{card.keywords}</p>
+    <div className="flex-shrink-0 w-full sm:w-48 bg-slate-100/10 rounded-md p-4 flex flex-col justify-center items-center">
+        <img src={card.image} alt={card.name} className="rounded-lg w-full object-cover"/>
     </div>
     <div className="flex-grow">
-        <h3 className="font-bold text-lg text-gray-300">{card.position}</h3>
+        <h3 className="font-bold text-lg text-ase-turquoise">{card.position}</h3>
         <h4 className="text-2xl font-serif text-white mb-2">{card.name}</h4>
-        <p className="text-gray-400 leading-relaxed">{card.description}</p>
+        <p className="text-gray-300 leading-relaxed">{card.description}</p>
     </div>
   </div>
 );
@@ -47,7 +43,7 @@ const HowItWorks: React.FC = () => {
         <p className="text-center text-gray-400 mb-8 max-w-2xl mx-auto">Veja um exemplo de como sua Leitura Cigana será apresentada no aplicativo, trazendo clareza sobre as tendências do seu caminho.</p>
         
         <div className="space-y-6">
-          {readingResult.map(card => <CardResult key={card.number} card={card} />)}
+          {exampleCardsData.map(card => <CardResult key={card.id} card={card} />)}
         </div>
 
         <div className="text-center mt-10">

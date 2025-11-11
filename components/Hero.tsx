@@ -8,7 +8,7 @@ const WhatsAppIcon: React.FC = () => (
 
 const Hero: React.FC = () => {
   return (
-    <section className="w-full text-center py-24 md:py-32 px-4 flex flex-col items-center justify-center animate-fade-in-up">
+    <section className="w-full text-center py-24 md:py-32 px-4 flex flex-col items-center justify-center">
         <h1 className="text-5xl md:text-7xl font-serif font-bold text-ase-gold leading-tight">
             Àlá Àse: Oráculos de Axé
         </h1>
